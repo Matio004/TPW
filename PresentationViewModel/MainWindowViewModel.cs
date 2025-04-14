@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using TP.ConcurrentProgramming.Presentation.Model;
 using TP.ConcurrentProgramming.Presentation.ViewModel.MVVMLight;
 using ModelIBall = TP.ConcurrentProgramming.Presentation.Model.IBall;
@@ -32,6 +33,8 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
     #region public API
 
+        public int BallCount { get; set; }
+
     public void Start(int numberOfBalls)
     {
       if (Disposed)
@@ -40,7 +43,7 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
       Observer.Dispose();
     }
 
-    public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
+        public ObservableCollection<ModelIBall> Balls { get; } = new ObservableCollection<ModelIBall>();
 
     #endregion public API
 
@@ -79,6 +82,13 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
     private ModelAbstractApi ModelLayer;
     private bool Disposed = false;
 
-    #endregion private
-  }
+        private RelayCommand start_Click;
+        public ICommand Start_Click => start_Click ??= new RelayCommand(PerformStart_Click);
+
+        private void PerformStart_Click()
+        {
+            ModelLayer.Start(BallCount);
+        }
+        #endregion private
+    }
 }

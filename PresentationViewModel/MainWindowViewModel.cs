@@ -87,7 +87,11 @@ namespace TP.ConcurrentProgramming.Presentation.ViewModel
 
         private void PerformStart_Click()
         {
-            ModelLayer.Start(BallCount);
+            if (BallCount > 0 && BallCount <= 20)
+            {
+                ModelLayer.Start(BallCount);
+            }
+            
         }
         #endregion private
     }

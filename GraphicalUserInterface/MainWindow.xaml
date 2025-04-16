@@ -9,6 +9,7 @@
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
+    <Viewbox Stretch="Uniform">
     <DockPanel>
         <TextBox
             Name="NumberInput"
@@ -44,5 +45,6 @@
             </ItemsControl>
         </Border>
     </DockPanel>
-    
+    </Viewbox>
+
 </Window>

@@ -8,6 +8,8 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using System.Threading;
+
 namespace TP.ConcurrentProgramming.Data
 {
   internal class Ball : IBall
@@ -18,30 +20,52 @@ namespace TP.ConcurrentProgramming.Data
     {
       Position = initialPosition;
       Velocity = initialVelocity;
-    }
 
-    #endregion ctor
+        thread = new Thread(MoveLoop)
+        {
+            IsBackground = true
+        };
+        isRunning = true;
+        thread.Start();
+        }
+        internal void Stop()
+        {
+            isRunning = false;
+            thread.Join(); // Bezpieczne zakończenie wątku
+        }
 
-    #region IBall
+        #endregion ctor
 
-    public event EventHandler<IVector>? NewPositionNotification;
+        #region IBall
+
+        public event EventHandler<IVector>? NewPositionNotification;
 
     public IVector Velocity { get; set; }
+        private readonly Thread thread;
+        private volatile bool isRunning;
 
-    #endregion IBall
+        #endregion IBall
 
-    #region private
+        #region private
 
-    private Vector Position;
+        private Vector Position;
 
     private void RaiseNewPositionChangeNotification()
     {
       NewPositionNotification?.Invoke(this, Position);
     }
 
-    internal void Move(Vector delta)
+        private void MoveLoop()
+        {
+            while (isRunning)
+            {
+                Move();
+                Thread.Sleep(50); // Możesz też użyć TimeSpan jako stałej
+            }
+        }
+        private void Move()
     {
-      Position = new Vector(Position.x + delta.x, Position.y + delta.y);
+      Position = new Vector(Position.x + Velocity.x, Position.y + Velocity.y);
       RaiseNewPositionChangeNotification();
     }
 

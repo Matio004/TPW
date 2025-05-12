@@ -19,7 +19,7 @@ namespace TP.ConcurrentProgramming.Data
 
     public DataImplementation()
     {
-      MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(50));
+      //MoveTimer = new Timer(Move, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(50));
     }
 
     #endregion ctor
@@ -36,7 +36,8 @@ namespace TP.ConcurrentProgramming.Data
       for (int i = 0; i < numberOfBalls; i++)
       {
         Vector startingPosition = new(random.Next(100, 400 - 100), random.Next(100, 400 - 100));
-        Ball newBall = new(startingPosition, startingPosition);
+        Vector startingVelocity = new(random.Next(-1, 1), random.Next(-1, 1));
+        Ball newBall = new(startingPosition, startingVelocity);
         upperLayerHandler(startingPosition, newBall);
         BallsList.Add(newBall);
       }
@@ -48,18 +49,20 @@ namespace TP.ConcurrentProgramming.Data
 
     protected virtual void Dispose(bool disposing)
     {
-      if (!Disposed)
-      {
-        if (disposing)
-        {
-          MoveTimer.Dispose();
-          BallsList.Clear();
+            if (!Disposed)
+            {
+                if (disposing)
+                {
+                    foreach (var ball in BallsList)
+                        (ball as Ball)?.Stop();
+
+                    BallsList.Clear();
+                }
+                Disposed = true;
+            }
+            else
+                throw new ObjectDisposedException(nameof(DataImplementation));
         }
-        Disposed = true;
-      }
-      else
-        throw new ObjectDisposedException(nameof(DataImplementation));
-    }
 
     public override void Dispose()
     {
@@ -75,14 +78,14 @@ namespace TP.ConcurrentProgramming.Data
     //private bool disposedValue;
     private bool Disposed = false;
 
-    private readonly Timer MoveTimer;
-    private Random RandomGenerator = new();
+    //private readonly Timer MoveTimer;
+    //private Random RandomGenerator = new();
     private List<Ball> BallsList = [];
 
     private void Move(object? x)
     {
-      foreach (Ball item in BallsList)
-            item.Move(new Vector((RandomGenerator.NextDouble() - 0.5) * 10, (RandomGenerator.NextDouble() - 0.5) * 10));
+     // foreach (Ball item in BallsList)
+            //item.Move();
         }
 
     #endregion private

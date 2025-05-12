@@ -39,20 +39,10 @@ namespace TP.ConcurrentProgramming.Data
       NewPositionNotification?.Invoke(this, Position);
     }
 
-    internal void Move(double width, double height, double diameter)
+    internal void Move(Vector delta)
     {
-        // Sprawdź kolizje przed aktualizacją pozycji
-        bool bounceX = (Position.x + Velocity.x <= 0) || (Position.x + Velocity.x >= width - diameter);
-        bool bounceY = (Position.y + Velocity.y <= 0) || (Position.y + Velocity.y >= height - diameter);
-
-        // Odwróć prędkość jeśli kolizja
-        if (bounceX) Velocity = new Vector(-Velocity.x, Velocity.y);
-        if (bounceY) Velocity = new Vector(Velocity.x, -Velocity.y);
-
-        // Aktualizuj pozycję
-        Position = new Vector(Position.x + Velocity.x, Position.y + Velocity.y);
-
-        RaiseNewPositionChangeNotification();
+      Position = new Vector(Position.x + delta.x, Position.y + delta.y);
+      RaiseNewPositionChangeNotification();
     }
 
         #endregion private

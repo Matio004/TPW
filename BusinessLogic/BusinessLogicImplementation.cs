@@ -9,6 +9,8 @@
 //_____________________________________________________________________________________________________________________________________
 
 using System.Diagnostics;
+using System.Numerics;
+using TP.ConcurrentProgramming.Data;
 using UnderneathLayerAPI = TP.ConcurrentProgramming.Data.DataAbstractAPI;
 
 namespace TP.ConcurrentProgramming.BusinessLogic
@@ -43,7 +45,9 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
       if (upperLayerHandler == null)
         throw new ArgumentNullException(nameof(upperLayerHandler));
-      layerBellow.Start(numberOfBalls, (startingPosition, databall) => upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall)));
+      layerBellow.Start(numberOfBalls, (startingPosition, databall) => {
+          upperLayerHandler(new Position(startingPosition.x, startingPosition.x), new Ball(databall));
+      });
     }
 
     #endregion BusinessLogicAbstractAPI
@@ -52,7 +56,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
     private bool Disposed = false;
 
-    private readonly UnderneathLayerAPI layerBellow;
+        private readonly UnderneathLayerAPI layerBellow;
 
     #endregion private
 

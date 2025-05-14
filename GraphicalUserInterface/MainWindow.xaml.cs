@@ -38,5 +38,6 @@ namespace TP.ConcurrentProgramming.PresentationView
         viewModel.Dispose();
       base.OnClosed(e);
     }
+
     }
 }

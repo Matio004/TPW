@@ -8,6 +8,8 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using TP.ConcurrentProgramming.Data;
+
 namespace TP.ConcurrentProgramming.BusinessLogic
 {
   internal class Ball : IBall
@@ -15,6 +17,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     public Ball(Data.IBall ball)
     {
       ball.NewPositionNotification += RaisePositionChangeEvent;
+            ball.NewPositionNotification += (sender, position) => collisions(position, ball);
     }
 
     #region IBall
@@ -30,6 +33,24 @@ namespace TP.ConcurrentProgramming.BusinessLogic
       NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
     }
 
-    #endregion private
-  }
+    private void collisions(IVector Position, Data.IBall ball)
+    {
+        bool bounceX = (Position.x + ball.Velocity.x <= 0) || (Position.x + ball.Velocity.x >= 800 - 20);
+        bool bounceY = (Position.y + ball.Velocity.y <= 0) || (Position.y + ball.Velocity.y >= 420 - 20);
+
+        // Odwróć prędkość jeśli kolizja
+        if (bounceX)
+        {
+            ball.SetVelocty(-ball.Velocity.x, ball.Velocity.y);
+        }
+
+        if (bounceY) ball.SetVelocty(ball.Velocity.x, -ball.Velocity.y);
+
+
+
+
+    }
+
+        #endregion private
+    }
 }

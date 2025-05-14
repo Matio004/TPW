@@ -80,7 +80,7 @@ namespace TP.ConcurrentProgramming.Data
 
     //private readonly Timer MoveTimer;
     //private Random RandomGenerator = new();
-    private List<Ball> BallsList = [];
+    public List<Ball> BallsList = [];
 
     private void Move(object? x)
     {

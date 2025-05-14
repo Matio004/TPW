@@ -69,6 +69,16 @@ namespace TP.ConcurrentProgramming.Data
       RaiseNewPositionChangeNotification();
     }
 
+        public IVector getPos()
+        {
+            return Position;
+        }
+
+        public void setPos(double x, double y)
+        {
+            Position = new Vector(x, y);
+        }
+
         #endregion private
     }
 }

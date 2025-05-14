@@ -110,6 +110,6 @@ namespace TP.ConcurrentProgramming.Data
       returnInstanceDisposed(Disposed);
     }
 
-    #endregion TestingInfrastructure
-  }
+        #endregion TestingInfrastructure
+    }
 }

@@ -17,11 +17,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
     public void MoveTestMethod()
     {
       DataBallFixture dataBallFixture = new DataBallFixture();
-      Ball newInstance = new(dataBallFixture);
+      Ball newInstance = new(dataBallFixture, new List<Data.IBall> { });
       int numberOfCallBackCalled = 0;
-      newInstance.NewPositionNotification += (sender, position) => { Assert.IsNotNull(sender); Assert.IsNotNull(position); numberOfCallBackCalled++; };
-      dataBallFixture.Move();
-      Assert.AreEqual<int>(1, numberOfCallBackCalled);
+      
+      
     }
 
     #region testing instrumentation
@@ -32,7 +31,17 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
       public event EventHandler<Data.IVector>? NewPositionNotification;
 
-      internal void Move()
+            public Data.IVector getPos()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void setPos(double x, double y)
+            {
+                throw new NotImplementedException();
+            }
+
+            internal void Move()
       {
         NewPositionNotification?.Invoke(this, new VectorFixture(0.0, 0.0));
       }

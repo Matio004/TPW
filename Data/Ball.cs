@@ -60,7 +60,7 @@ namespace TP.ConcurrentProgramming.Data
             while (isRunning)
             {
                 Move();
-                Thread.Sleep(50); // Możesz też użyć TimeSpan jako stałej
+                Thread.Sleep(5); // Możesz też użyć TimeSpan jako stałej
             }
         }
         private void Move()

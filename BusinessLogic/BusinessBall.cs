@@ -103,18 +103,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                         ball.SetVelocty(ball.Velocity.x, ball.Velocity.y + dv1y);
                         other.SetVelocty(other.Velocity.x + dv2x, other.Velocity.y);
                         other.SetVelocty(other.Velocity.x, other.Velocity.y + dv2y);
-
-                        double overlap = minDistance - euclideanDistance;
-                        if (overlap > 0)
-                        {
-                            double adjustX = nx * overlap * 0.5;
-                            double adjustY = ny * overlap * 0.5;
-
-                            ball.setPos(ball.getPos().x + adjustX, ball.getPos().y + adjustY);
-
-                            other.setPos(other.getPos().x - adjustX, other.getPos().y - adjustY);
-                        }
-
                     }
 
                 }

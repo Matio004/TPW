@@ -64,6 +64,5 @@ namespace TP.ConcurrentProgramming.Data
             Velocity = new Vector(x, y);
         }
         public IVector getPos();
-        public void setPos(double x, double y);
   }
 }

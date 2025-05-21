@@ -74,11 +74,6 @@ namespace TP.ConcurrentProgramming.Data
             return Position;
         }
 
-        public void setPos(double x, double y)
-        {
-            Position = new Vector(x, y);
-        }
-
         #endregion private
     }
 }

@@ -43,6 +43,7 @@ namespace TP.ConcurrentProgramming.Data
     public IVector Velocity { get; set; }
         private readonly Thread thread;
         private volatile bool isRunning;
+        private int refreshRate = 5;
 
         #endregion IBall
 

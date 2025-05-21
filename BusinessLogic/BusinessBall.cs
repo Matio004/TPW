@@ -101,6 +101,16 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
                         ball.SetVelocty(v1x + dv1x, v1y + dv1y);
                         other.SetVelocty(v2x + dv2x, v2y + dv2y);
+
+                        double overlap = minDistance - euclideanDistance;
+                        if (overlap > 0)
+                        {
+                            double adjust = overlap * 0.5;
+                            ball.getPos().x += nx * adjust;
+                            ball.getPos().y += ny * adjust;
+                            other.getPos().x -= nx * adjust;
+                            other.getPos().y -= ny * adjust;
+                        }
                     }
 
                 }
@@ -112,7 +122,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                     Monitor.Exit(this);
             }
 
-            
 
 
         }

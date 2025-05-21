@@ -21,6 +21,8 @@ namespace TP.ConcurrentProgramming.Data
         {
             Position = initialPosition;
             Velocity = initialVelocity;
+            Diameter = 20;
+            Mass = 1;
 
             thread = new Thread(MoveLoop)
             {
@@ -43,6 +45,8 @@ namespace TP.ConcurrentProgramming.Data
         public event EventHandler<IVector>? NewPositionNotification;
 
         public IVector Velocity { get; set; }
+        public double Diameter { get; }
+        public double Mass { get; }
         private readonly Thread thread;
         private volatile bool isRunning;
         private int refreshTime;

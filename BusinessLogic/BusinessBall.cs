@@ -57,7 +57,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
                 foreach (Data.IBall other in ballList)
                 {
-                    if (other == this) continue;
+                    if (ReferenceEquals(other, ball)) continue;
 
                     double x1 = ball.getPos().x;
                     double y1 = ball.getPos().y;

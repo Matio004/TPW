@@ -99,10 +99,8 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                         double dv2x = (v2nAfter - v2n) * nx;
                         double dv2y = (v2nAfter - v2n) * ny;
 
-                        ball.SetVelocty(ball.Velocity.x + dv1x, ball.Velocity.y);
-                        ball.SetVelocty(ball.Velocity.x, ball.Velocity.y + dv1y);
-                        other.SetVelocty(other.Velocity.x + dv2x, other.Velocity.y);
-                        other.SetVelocty(other.Velocity.x, other.Velocity.y + dv2y);
+                        ball.SetVelocty(v1x + dv1x, v1y + dv1y);
+                        other.SetVelocty(v2x + dv2x, v2y + dv2y);
                     }
 
                 }

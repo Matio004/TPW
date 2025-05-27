@@ -14,12 +14,13 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 {
   internal class Ball : IBall
   {
-    public Ball(Data.IBall ball, List<Data.IBall> ballList)
+    public Ball(Data.IBall ball, List<Ball> ballList, Object BallLock)
     {
       ball.NewPositionNotification += RaisePositionChangeEvent;
-            ball.NewPositionNotification += (sender, position) => collisions(position, ball);
             this.ballList = ballList;
-    }
+            this.BallLock = BallLock;
+            dataBall = ball;
+        }
 
     #region IBall
 
@@ -29,47 +30,41 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
         #region private
 
-        private List<Data.IBall> ballList;
+        private List<Ball> ballList;
+        private Data.IBall dataBall;
+        private readonly object BallLock;
 
-    private void RaisePositionChangeEvent(object? sender, Data.IVector e)
+        private void RaisePositionChangeEvent(object? sender, Data.IVector e)
     {
-      NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
-    }
-
-    private void collisions(IVector Position, Data.IBall ball)
-    {
-            bool lockWasTaken = false;
-            try
-            {
-                Monitor.Enter(this, ref lockWasTaken);
-                if (!lockWasTaken)
-                    throw new ArgumentException();
-                bool bounceX = (Position.x + ball.Velocity.x <= 0) || (Position.x + ball.Velocity.x >= 800 - 20 - 8);
-                bool bounceY = (Position.y + ball.Velocity.y <= 0) || (Position.y + ball.Velocity.y >= 420 - 20 - 8);
+            lock (BallLock) {
+                bool bounceX = (e.x  <= 0) || (e.x >= 800 - 20 - 8);
+                bool bounceY = (e.y <= 0) || (e.y >= 420 - 20 - 8);
 
                 // Odwróć prędkość jeśli kolizja
                 if (bounceX)
                 {
-                    ball.SetVelocty(-ball.Velocity.x, ball.Velocity.y);
+                    dataBall.SetVelocty(-dataBall.Velocity.x, dataBall.Velocity.y);
                 }
 
-                if (bounceY) ball.SetVelocty(ball.Velocity.x, -ball.Velocity.y);
+                if (bounceY) dataBall.SetVelocty(dataBall.Velocity.x, -dataBall.Velocity.y);
 
-                foreach (Data.IBall other in ballList)
+                
+
+                foreach (Ball other in ballList)
                 {
-                    if (ReferenceEquals(other, ball)) continue;
+                    if (ReferenceEquals(other, this)) continue;
 
-                    double x1 = ball.getPos().x;
-                    double y1 = ball.getPos().y;
+                    double x1 = dataBall.Position.x;
+                    double y1 = dataBall.Position.y;
 
-                    double x2 = other.getPos().x;
-                    double y2 = other.getPos().y;
+                    double x2 = other.dataBall.Position.x;
+                    double y2 = other.dataBall.Position.y;
 
                     double dx = x1 - x2;
                     double dy = y1 - y2;
 
                     double euclideanDistance = Math.Sqrt(dx * dx + dy * dy);
-                    double minDistance = (ball.Diameter + other.Diameter) / 2;
+                    double minDistance = (dataBall.Diameter + other.dataBall.Diameter) / 2;
 
                     if (euclideanDistance > 0 && euclideanDistance < minDistance)
                     {
@@ -78,14 +73,14 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                         double ny = dy / euclideanDistance;
 
                         //Velocity
-                        double v1x = ball.Velocity.x;
-                        double v1y = ball.Velocity.y;
-                        double v2x = other.Velocity.x;
-                        double v2y = other.Velocity.y;
+                        double v1x = dataBall.Velocity.x;
+                        double v1y = dataBall.Velocity.y;
+                        double v2x = other.dataBall.Velocity.x;
+                        double v2y = other.dataBall.Velocity.y;
 
                         //Mass
-                        double m1 = ball.Mass;
-                        double m2 = other.Mass;
+                        double m1 = dataBall.Mass;
+                        double m2 = other.dataBall.Mass;
 
                         //product of Velocity and normal
                         double v1n = v1x * nx + v1y * ny;
@@ -99,32 +94,27 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                         double dv2x = (v2nAfter - v2n) * nx;
                         double dv2y = (v2nAfter - v2n) * ny;
 
-                        ball.SetVelocty(v1x + dv1x, v1y + dv1y);
-                        other.SetVelocty(v2x + dv2x, v2y + dv2y);
+                        dataBall.SetVelocty(v1x + dv1x, v1y + dv1y);
+                        other.dataBall.SetVelocty(v2x + dv2x, v2y + dv2y);
 
                         double overlap = minDistance - euclideanDistance;
                         if (overlap > 0)
                         {
                             double adjust = overlap * 0.5;
-                            ball.getPos().x += nx * adjust;
-                            ball.getPos().y += ny * adjust;
-                            other.getPos().x -= nx * adjust;
-                            other.getPos().y -= ny * adjust;
+                            dataBall.Position.x += nx * adjust;
+                            dataBall.Position.y += ny * adjust;
+                            other.dataBall.Position.x -= nx * adjust;
+                            other.dataBall.Position.y -= ny * adjust;
                         }
                     }
 
                 }
 
             }
-            finally
-            {
-                if (lockWasTaken)
-                    Monitor.Exit(this);
-            }
+            
+            NewPositionNotification?.Invoke(this, new Position(e.x, e.y));
+    }
 
-
-
-        }
 
         #endregion private
     }

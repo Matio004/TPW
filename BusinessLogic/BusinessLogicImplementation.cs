@@ -45,10 +45,9 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         throw new ObjectDisposedException(nameof(BusinessLogicImplementation));
       if (upperLayerHandler == null)
         throw new ArgumentNullException(nameof(upperLayerHandler));
-            List<Data.IBall> ballList = new();
       layerBellow.Start(numberOfBalls, (startingPosition, databall) => {
-          IBall ball = new Ball(databall, ballList);
-          ballList.Add(databall);
+          Ball ball = new Ball(databall, ballList, BallLock);
+          ballList.Add(ball);
           upperLayerHandler(new Position(startingPosition.x, startingPosition.x), ball);
       });
     }
@@ -60,12 +59,14 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     private bool Disposed = false;
 
         private readonly UnderneathLayerAPI layerBellow;
+        private List<Ball> ballList = new List<Ball>();
+        private readonly object BallLock = new();
 
-    #endregion private
+        #endregion private
 
-    #region TestingInfrastructure
+        #region TestingInfrastructure
 
-    [Conditional("DEBUG")]
+        [Conditional("DEBUG")]
     internal void CheckObjectDisposed(Action<bool> returnInstanceDisposed)
     {
       returnInstanceDisposed(Disposed);

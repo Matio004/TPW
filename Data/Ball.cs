@@ -15,12 +15,16 @@ namespace TP.ConcurrentProgramming.Data
 {
     internal class Ball : IBall
     {
+        private readonly object velocityLock = new();
+        private readonly object positionLock = new();
+        private IVector velocity { get; set; }
+        private IVector position { get; set; }
         #region ctor
 
         internal Ball(Vector initialPosition, Vector initialVelocity)
         {
-            Position = initialPosition;
-            Velocity = initialVelocity;
+            position = initialPosition;
+            velocity = initialVelocity;
             Diameter = 20;
             Mass = 1;
 
@@ -28,8 +32,7 @@ namespace TP.ConcurrentProgramming.Data
             {
                 IsBackground = true
             };
-            isRunning = true;
-            thread.Start();
+            
         }
 
         internal void Stop()
@@ -44,18 +47,55 @@ namespace TP.ConcurrentProgramming.Data
 
         public event EventHandler<IVector>? NewPositionNotification;
 
-        public IVector Velocity { get; set; }
+
+        public IVector Velocity {
+            get
+            {
+                lock (velocityLock)
+                {
+                    return velocity;
+                }
+            }
+            set
+            {
+                lock (velocityLock)
+                {
+                    velocity = (Vector)value;
+                }
+
+            }
+        }
+
+        public IVector Position
+        {
+            get
+            {
+                lock (positionLock)
+                {
+                    return position;
+                }
+            }
+        }
+
         public double Diameter { get; }
         public double Mass { get; }
         private readonly Thread thread;
         private volatile bool isRunning;
         private int refreshTime;
 
+        public void Start()
+        {
+            if (!isRunning)
+            {
+                isRunning = true;
+                thread.Start();
+            }
+           
+        }
+
         #endregion IBall
 
         #region private
-
-        private Vector Position;
 
         private void RaiseNewPositionChangeNotification()
         {
@@ -84,13 +124,12 @@ namespace TP.ConcurrentProgramming.Data
 
         private void Move()
         {
-            Position = new Vector(Position.x + Velocity.x, Position.y + Velocity.y);
+            lock (positionLock)
+            {
+                position = new Vector(Position.x + Velocity.x * refreshTime / 1000, Position.y + Velocity.y * refreshTime / 1000);
+            }
+            
             RaiseNewPositionChangeNotification();
-        }
-
-        public IVector getPos()
-        {
-            return Position;
         }
 
         #endregion private

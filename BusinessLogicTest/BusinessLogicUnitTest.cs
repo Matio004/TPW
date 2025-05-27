@@ -112,20 +112,13 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       private class DataBallFixture : Data.IBall
       {
         public IVector Velocity { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IVector Position { get => throw new NotImplementedException();}
+                public void Start() { throw new NotImplementedException(); }
                 public double Diameter { get => throw new NotImplementedException(); }
                 public double Mass { get => throw new NotImplementedException(); }
 
                 public event EventHandler<IVector>? NewPositionNotification = null;
 
-                public IVector getPos()
-                {
-                    throw new NotImplementedException();
-                }
-
-                public void setPos(double x, double y)
-                {
-                    throw new NotImplementedException();
-                }
             }
     }
 

@@ -79,9 +79,7 @@ namespace TP.ConcurrentProgramming.Data
 
         public double Diameter { get; }
         public double Mass { get; }
-        private readonly Thread thread;
-        private volatile bool isRunning;
-        private int refreshTime;
+        
 
         public void Start()
         {
@@ -96,7 +94,9 @@ namespace TP.ConcurrentProgramming.Data
         #endregion IBall
 
         #region private
-
+        private readonly Thread thread;
+        private volatile bool isRunning;
+        private int refreshTime;
         private void RaiseNewPositionChangeNotification()
         {
             NewPositionNotification?.Invoke(this, Position);

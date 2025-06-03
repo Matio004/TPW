@@ -25,8 +25,6 @@ namespace TP.ConcurrentProgramming.Data
         {
             position = initialPosition;
             velocity = initialVelocity;
-            Diameter = 20;
-            Mass = 1;
 
             thread = new Thread(MoveLoop)
             {
@@ -76,9 +74,6 @@ namespace TP.ConcurrentProgramming.Data
                 }
             }
         }
-
-        public double Diameter { get; }
-        public double Mass { get; }
         
 
         public void Start()
@@ -104,29 +99,27 @@ namespace TP.ConcurrentProgramming.Data
 
         private void MoveLoop()
         {
-            const int maxRefreshTime = 100;
-            const int minRefreshTime = 10;
 
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+
+            long last = stopwatch.ElapsedMilliseconds;
             while (isRunning)
             {
-                Move();
-
-                double actualVelocity = Math.Sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y);
-                double normalizedVelocity = Math.Clamp(actualVelocity, 0.0, 1.0);
-                refreshTime = Math.Clamp(
-                  (int)(maxRefreshTime - normalizedVelocity * (maxRefreshTime - minRefreshTime)),
-                  minRefreshTime,
-                  maxRefreshTime);
-
-                Thread.Sleep(refreshTime);
+                long current = stopwatch.ElapsedMilliseconds;
+                int dtime = (int)(current - last);
+                last = current;
+                Move(dtime);
+                //Thread.Sleep(5);
             }
+            stopwatch.Stop();
         }
 
-        private void Move()
+        private void Move(int dtime)
         {
             lock (positionLock)
             {
-                position = new Vector(Position.x + Velocity.x * refreshTime / 1000, Position.y + Velocity.y * refreshTime / 1000);
+                position = new Vector(Position.x + Velocity.x * dtime / 1000, Position.y + Velocity.y * dtime / 1000);
             }
             
             RaiseNewPositionChangeNotification();

@@ -64,7 +64,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                     double dy = y1 - y2;
 
                     double euclideanDistance = Math.Sqrt(dx * dx + dy * dy);
-                    double minDistance = (dataBall.Diameter + other.dataBall.Diameter) / 2;
+                    double minDistance = 20;
 
                     if (euclideanDistance > 0 && euclideanDistance < minDistance)
                     {
@@ -79,8 +79,8 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                         double v2y = other.dataBall.Velocity.y;
 
                         //Mass
-                        double m1 = dataBall.Mass;
-                        double m2 = other.dataBall.Mass;
+                        double m1 = 1;
+                        double m2 = 1;
 
                         //product of Velocity and normal
                         double v1n = v1x * nx + v1y * ny;

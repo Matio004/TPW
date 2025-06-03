@@ -14,12 +14,13 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 {
   internal class Ball : IBall
   {
-    public Ball(Data.IBall ball, List<Ball> ballList, Object BallLock)
+    public Ball(Data.IBall ball, List<Ball> ballList, Object BallLock, ILogger logger)
     {
       ball.NewPositionNotification += RaisePositionChangeEvent;
             this.ballList = ballList;
             this.BallLock = BallLock;
             dataBall = ball;
+            this.logger = logger;
         }
 
     #region IBall
@@ -32,6 +33,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
         private List<Ball> ballList;
         private Data.IBall dataBall;
+        private ILogger logger;
         private readonly object BallLock;
 
         private void RaisePositionChangeEvent(object? sender, Data.IVector e)
@@ -44,10 +46,14 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                 if (bounceX)
                 {
                     dataBall.SetVelocty(-dataBall.Velocity.x, dataBall.Velocity.y);
+                    logger.Log("X Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
                 }
 
-                if (bounceY) dataBall.SetVelocty(dataBall.Velocity.x, -dataBall.Velocity.y);
-
+                if (bounceY)
+                {
+                    dataBall.SetVelocty(dataBall.Velocity.x, -dataBall.Velocity.y);
+                    logger.Log("Y Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                }
                 
 
                 foreach (Ball other in ballList)
@@ -101,6 +107,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
                         dataBall.SetVelocty(v1x + dv1x, v1y + dv1y);
                         other.dataBall.SetVelocty(v2x + dv2x, v2y + dv2y);
+                        logger.Log("Ball Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
 
                         double overlap = minDistance - euclideanDistance;
                         if (overlap > 0)

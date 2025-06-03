@@ -23,7 +23,7 @@ namespace TP.ConcurrentProgramming.Data
 
     #region public API
 
-    public abstract void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler);
+    public abstract void Start(int numberOfBalls, Action<IVector, IBall> upperLayerHandler, ILogger logger);
 
     #endregion public API
 
@@ -66,4 +66,9 @@ namespace TP.ConcurrentProgramming.Data
         }
         public void Start();
   }
+    public interface ILogger : IDisposable
+    {
+        void Log(string message, int threadId, IVector position, IVector velocity);
+        static ILogger CreateDefaultLogger() => Logger.LoggerInstance;
+    }
 }

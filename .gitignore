@@ -178,6 +178,9 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
+# Logs dir
+logs
+
 # Click-Once directory
 publish/
 

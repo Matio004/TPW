@@ -35,6 +35,8 @@ namespace TP.ConcurrentProgramming.BusinessLogic
         private Data.IBall dataBall;
         private ILogger logger;
         private readonly object BallLock;
+        private bool collidedX = false;
+        private bool collidedY = false;
 
         private void RaisePositionChangeEvent(object? sender, Data.IVector e)
     {
@@ -45,16 +47,32 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                 // Odwróć prędkość jeśli kolizja
                 if (bounceX)
                 {
-                    dataBall.SetVelocty(-dataBall.Velocity.x, dataBall.Velocity.y);
-                    logger.Log("X Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                    if (!collidedX)
+                    {
+                        dataBall.SetVelocty(-dataBall.Velocity.x, dataBall.Velocity.y);
+                        logger.Log("X Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                        collidedX = true;
+                    }
+                }
+                else
+                {
+                    collidedX = false;
                 }
 
                 if (bounceY)
                 {
-                    dataBall.SetVelocty(dataBall.Velocity.x, -dataBall.Velocity.y);
-                    logger.Log("Y Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                    if (!collidedY)
+                    {
+                        dataBall.SetVelocty(dataBall.Velocity.x, -dataBall.Velocity.y);
+                        logger.Log("Y Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                        collidedY = true;
+                    }
                 }
-                
+                else
+                {
+                    collidedY = false;
+                }
+
 
                 foreach (Ball other in ballList)
                 {
@@ -74,8 +92,9 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
                     double euclideanDistance = Math.Sqrt(dx * dx + dy * dy);
                     double minDistance = 20;
-
-                    if (euclideanDistance > 0 && euclideanDistance < minDistance)
+                    double collisionBuffer = 0.01;
+                    
+                    if (euclideanDistance > 0 && euclideanDistance < (minDistance - collisionBuffer))
                     {
 
                         double nx = dx / euclideanDistance;

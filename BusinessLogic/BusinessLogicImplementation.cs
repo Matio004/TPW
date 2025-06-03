@@ -22,16 +22,16 @@ namespace TP.ConcurrentProgramming.BusinessLogic
     public BusinessLogicImplementation() : this(null)
     { }
 
-    internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer)
-    {
-      layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
-    }
+        internal BusinessLogicImplementation(UnderneathLayerAPI? underneathLayer)
+        {
+            layerBellow = underneathLayer == null ? UnderneathLayerAPI.GetDataLayer() : underneathLayer;
+        }
 
-    #endregion ctor
+        #endregion ctor
 
-    #region BusinessLogicAbstractAPI
+        #region BusinessLogicAbstractAPI
 
-    public override void Dispose()
+        public override void Dispose()
     {
       if (Disposed)
         throw new ObjectDisposedException(nameof(BusinessLogicImplementation));

@@ -7,8 +7,9 @@
 //  https://github.com/mpostol/TP/discussions/182
 //
 //_____________________________________________________________________________________________________________________________________
-
+using TP.ConcurrentProgramming.Data;
 namespace TP.ConcurrentProgramming.BusinessLogic.Test
+
 {
   [TestClass]
   public class BallUnitTest
@@ -16,12 +17,10 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
     [TestMethod]
     public void MoveTestMethod()
     {
-      DataBallFixture dataBallFixture = new DataBallFixture();
+            LoggerFixture logger = new LoggerFixture();
+            DataBallFixture dataBallFixture = new DataBallFixture();
             object BallLock = new();
-            Ball newInstance = new(dataBallFixture, new List<Ball> { }, BallLock);
-      int numberOfCallBackCalled = 0;
-      
-      
+            Ball newInstance = new(dataBallFixture, new List<Ball> { }, BallLock, logger);
     }
 
     #region testing instrumentation
@@ -54,6 +53,23 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
       public double x { get; set; }
       public double y { get; set; }
     }
+
+     private class LoggerFixture : ILogger
+     {
+         public void Dispose()
+         {
+            
+         }
+
+         public void Log(string message, int threadId, Data.IVector position, Data.IVector velocity)
+         {
+                
+         }
+         public void Stop()
+         {
+           
+         }
+     }
 
     #endregion testing instrumentation
   }

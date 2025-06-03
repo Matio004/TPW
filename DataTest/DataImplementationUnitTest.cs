@@ -8,6 +8,8 @@
 //
 //_____________________________________________________________________________________________________________________________________
 
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
+
 namespace TP.ConcurrentProgramming.Data.Test
 {
   [TestClass]
@@ -30,6 +32,7 @@ namespace TP.ConcurrentProgramming.Data.Test
     [TestMethod]
     public void DisposeTestMethod()
     {
+      LoggerFixture logger = new LoggerFixture();
       DataImplementation newInstance = new DataImplementation();
       bool newInstanceDisposed = false;
       newInstance.CheckObjectDisposed(x => newInstanceDisposed = x);
@@ -42,7 +45,7 @@ namespace TP.ConcurrentProgramming.Data.Test
       Assert.IsNotNull(ballsList);
       newInstance.CheckNumberOfBalls(x => Assert.AreEqual<int>(0, x));
       Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Dispose());
-      Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Start(0, (position, ball) => { }));
+      Assert.ThrowsException<ObjectDisposedException>(() => newInstance.Start(0, (position, ball) => { }, logger));
     }
 
     [TestMethod]
@@ -52,6 +55,7 @@ namespace TP.ConcurrentProgramming.Data.Test
       {
         int numberOfCallbackInvoked = 0;
         int numberOfBalls2Create = 10;
+        LoggerFixture logger = new LoggerFixture();
         newInstance.Start(
           numberOfBalls2Create,
           (startingPosition, ball) =>
@@ -60,10 +64,26 @@ namespace TP.ConcurrentProgramming.Data.Test
             Assert.IsTrue(startingPosition.x >= 0);
             Assert.IsTrue(startingPosition.y >= 0);
             Assert.IsNotNull(ball);
-          });
+          },logger);
         Assert.AreEqual<int>(numberOfBalls2Create, numberOfCallbackInvoked);
         newInstance.CheckNumberOfBalls(x => Assert.AreEqual<int>(10, x));
       }
     }
-  }
+        private class LoggerFixture : ILogger
+        {
+            public void Dispose()
+            {
+             
+            }
+
+            public void Log(string message, int threadId, Data.IVector position, Data.IVector velocity)
+            {
+
+            }
+            public void Stop()
+            {
+
+            }
+        }
+    }
 }

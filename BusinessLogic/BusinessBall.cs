@@ -54,11 +54,14 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                 {
                     if (ReferenceEquals(other, this)) continue;
 
-                    double x1 = dataBall.Position.x;
-                    double y1 = dataBall.Position.y;
+                    IVector temp = dataBall.Position;
+                    IVector temp_other = other.dataBall.Position;
 
-                    double x2 = other.dataBall.Position.x;
-                    double y2 = other.dataBall.Position.y;
+                    double x1 = temp.x;
+                    double y1 = temp.y;
+
+                    double x2 = temp_other.x;
+                    double y2 = temp_other.y;
 
                     double dx = x1 - x2;
                     double dy = y1 - y2;
@@ -72,11 +75,13 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                         double nx = dx / euclideanDistance;
                         double ny = dy / euclideanDistance;
 
+                        IVector temp_velocity = dataBall.Velocity;
+                        IVector temp_other_velocity = other.dataBall.Velocity;
                         //Velocity
-                        double v1x = dataBall.Velocity.x;
-                        double v1y = dataBall.Velocity.y;
-                        double v2x = other.dataBall.Velocity.x;
-                        double v2y = other.dataBall.Velocity.y;
+                        double v1x = temp_velocity.x;
+                        double v1y = temp_velocity.y;
+                        double v2x = temp_other_velocity.x;
+                        double v2y = temp_other_velocity.y;
 
                         //Mass
                         double m1 = 1;

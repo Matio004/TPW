@@ -34,6 +34,11 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
 
       public event EventHandler<Data.IVector>? NewPositionNotification;
 
+            public int getId()
+            {
+                throw new NotImplementedException();
+            }
+
             public void Start() { throw new NotImplementedException(); }
 
 
@@ -64,10 +69,6 @@ namespace TP.ConcurrentProgramming.BusinessLogic.Test
          public void Log(string message, int threadId, Data.IVector position, Data.IVector velocity)
          {
                 
-         }
-         public void Stop()
-         {
-           
          }
      }
 

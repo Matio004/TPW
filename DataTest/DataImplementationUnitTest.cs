@@ -80,10 +80,6 @@ namespace TP.ConcurrentProgramming.Data.Test
             {
 
             }
-            public void Stop()
-            {
-
-            }
         }
     }
 }

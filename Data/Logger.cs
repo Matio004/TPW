@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace TP.ConcurrentProgramming.Data
 {
-    internal class Logger : ILogger, IDisposable
+    internal class Logger : ILogger
     {
         private static readonly Lazy<Logger> _singletonInstance = new Lazy<Logger>(() => new Logger());
 
@@ -79,14 +79,14 @@ namespace TP.ConcurrentProgramming.Data
             return dir?.FullName;
         }
 
-        public void Log(string message, int threadId, IVector position, IVector velocity)
+        public void Log(string message, int ballId, IVector position, IVector velocity)
         {
             if (!_isLoggingActive)
                 return;
 
             if (_queueLimiter.Wait(0))
             {
-                var logEntry = new BallLogEntry(DateTime.Now, message, threadId, position, velocity);
+                var logEntry = new BallLogEntry(DateTime.Now, message, ballId, position, velocity);
                 _logQueue.Enqueue(logEntry);
                 _logSignal.Set();
             }
@@ -105,15 +105,15 @@ namespace TP.ConcurrentProgramming.Data
         {
             public DateTime Timestamp { get; set; }
             public string Message { get; set; }
-            public int ThreadId { get; set; }
+            public int BallId { get; set; }
             public IVector Position { get; set; }
             public IVector Velocity { get; set; }
 
-            internal BallLogEntry(DateTime timestamp, string message, int threadId, IVector position, IVector velocity)
+            internal BallLogEntry(DateTime timestamp, string message, int ballId, IVector position, IVector velocity)
             {
                 Timestamp = timestamp;
                 Message = message;
-                ThreadId = threadId;
+                BallId = ballId;
                 Position = position;
                 Velocity = velocity;
             }

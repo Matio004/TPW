@@ -21,7 +21,7 @@ namespace TP.ConcurrentProgramming.Data
         private IVector position { get; set; }
         #region ctor
 
-        internal Ball(Vector initialPosition, Vector initialVelocity)
+        internal Ball(Vector initialPosition, Vector initialVelocity, int id)
         {
             position = initialPosition;
             velocity = initialVelocity;
@@ -30,7 +30,7 @@ namespace TP.ConcurrentProgramming.Data
             {
                 IsBackground = true
             };
-            
+            this.id = id;
         }
 
         internal void Stop()
@@ -85,13 +85,16 @@ namespace TP.ConcurrentProgramming.Data
             }
            
         }
-
+        public int getId()
+        {
+            return id;
+        }
         #endregion IBall
 
         #region private
         private readonly Thread thread;
         private volatile bool isRunning;
-        private int refreshTime;
+        private int id;
         private void RaiseNewPositionChangeNotification()
         {
             NewPositionNotification?.Invoke(this, Position);

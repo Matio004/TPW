@@ -65,6 +65,7 @@ namespace TP.ConcurrentProgramming.Data
             Velocity = new Vector(x, y);
         }
         public void Start();
+        public int getId();
   }
     public interface ILogger : IDisposable
     {

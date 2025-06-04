@@ -50,7 +50,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                     if (!collidedX)
                     {
                         dataBall.SetVelocty(-dataBall.Velocity.x, dataBall.Velocity.y);
-                        logger.Log("X Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                        logger.Log("X Wall Collision", dataBall.getId(), dataBall.Position, dataBall.Velocity);
                         collidedX = true;
                     }
                 }
@@ -64,7 +64,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
                     if (!collidedY)
                     {
                         dataBall.SetVelocty(dataBall.Velocity.x, -dataBall.Velocity.y);
-                        logger.Log("Y Wall Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                        logger.Log("Y Wall Collision", dataBall.getId(), dataBall.Position, dataBall.Velocity);
                         collidedY = true;
                     }
                 }
@@ -126,7 +126,7 @@ namespace TP.ConcurrentProgramming.BusinessLogic
 
                         dataBall.SetVelocty(v1x + dv1x, v1y + dv1y);
                         other.dataBall.SetVelocty(v2x + dv2x, v2y + dv2y);
-                        logger.Log("Ball Collision", Thread.CurrentThread.ManagedThreadId, dataBall.Position, dataBall.Velocity);
+                        logger.Log("Ball Collision", dataBall.getId(), dataBall.Position, dataBall.Velocity);
 
                         double overlap = minDistance - euclideanDistance;
                         if (overlap > 0)
